@@ -11,13 +11,18 @@ public class lineMapResult {
         this.newLines = newLines;
     }
 
+    //Print Matching Lines
+    public void printMatches(){
 
+        for(Map.Entry<Integer, Integer> e : lineMap.entrySet()){
 
+            int oldIndex = e.getKey();
+            int newIndex = e.getValue();
 
+            System.out.println((oldIndex + 1) + " --> " + (newIndex + 1));
 
+        }
 
-
-
-
+    }
 
 }
