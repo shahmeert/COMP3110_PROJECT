@@ -15,7 +15,7 @@ public class Project {
             return;
         }
 
-        String datasetPath = args[0];
+        String datasetPath = "TestCases";
 
         try {
             List<TestCase> tests = DSLoader.Loader(datasetPath);
