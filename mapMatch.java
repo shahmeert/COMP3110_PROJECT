@@ -45,4 +45,17 @@ public class mapMatch {
         return exactMatches;
     }
 
+    private static class CandidateMatch{
+        int oldIndex;
+        int newIndex;
+        double score;
+
+        CandidateMatch(int oldIndex, int newIndex, double score){
+            this.oldIndex =oldIndex;
+            this.newIndex = newIndex;
+            this.score = score;
+        }
+
+    }
+
 }
