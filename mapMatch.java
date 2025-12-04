@@ -1,4 +1,3 @@
-import java.net.MalformedURLException;
 import java.util.*;
 
 public class mapMatch {
@@ -73,7 +72,7 @@ public class mapMatch {
     }
 
     //Helper Class to calculate content and context similarity
-    private static class Similairty{
+    private static class Similarity{
 
         //Content Similarity
         public double contentSimilarity(String s1, String s2){
@@ -94,6 +93,51 @@ public class mapMatch {
             //Return content similarity score
             return 1.0 - ((double) distance / max);
 
+
+        }
+
+        //Context Similarity
+        public double contextSimilarity(int oldIndex, int newIndex, Map<Integer, Integer> exactMatchMap){
+
+            //No exact matches
+            if(exactMatchMap.isEmpty()){
+
+                return 0.0;
+
+            }
+
+            //Initialize difference as max
+            int difference = Integer.MAX_VALUE;
+
+
+            //Iterate through exact matches
+            for(Map.Entry<Integer, Integer> e : exactMatchMap.entrySet()){
+
+                //Exact match indexes
+                int emOldIndex = e.getKey();
+                int emNewIndex = e.getValue();
+
+
+                //Absolute Value Differences
+                int diffOld = (oldIndex > emOldIndex) ? (oldIndex - emOldIndex) : (emOldIndex - oldIndex);
+                int diffNew = (newIndex > emNewIndex) ? (newIndex - emNewIndex) : (emNewIndex - newIndex);
+                
+
+                //Set new lowest difference
+                int tempDiff = diffOld + diffNew;
+
+                if(tempDiff < difference){
+
+                    difference = tempDiff;
+
+                }
+
+            }
+
+            double similarity = (1.0 / (1.0 + difference)) * 10;
+
+            //Cap similarity at 1.0
+            return (similarity > 1.0) ? 1.0 : similarity;
 
         }
 
