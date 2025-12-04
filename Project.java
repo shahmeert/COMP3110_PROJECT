@@ -40,7 +40,7 @@ public class Project {
 
         } catch (IOException e) {
             System.out.println("Failed to load dataset from: " + datasetPath);
-            e.printStackTrace();
+
         }
     }
 }
