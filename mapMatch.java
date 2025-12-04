@@ -174,17 +174,17 @@ public class mapMatch {
         }
 
        //Helper methods for levenshtein
-       public static int costOfSubstitution(char a, char b){
+        public static int costOfSubstitution(char a, char b){
 
             return a == b ? 0 : 1;
 
-       }
+        }
 
-       public static int min(int... numbers){
+        public static int min(int... numbers){
 
             return Arrays.stream(numbers).min().orElse(Integer.MAX_VALUE);
 
-       }
+        }
 
 
     }
