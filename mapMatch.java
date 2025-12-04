@@ -1,3 +1,4 @@
+import java.net.MalformedURLException;
 import java.util.*;
 
 public class mapMatch {
@@ -74,6 +75,27 @@ public class mapMatch {
     //Helper Class to calculate content and context similarity
     private static class Similairty{
 
+        //Content Similarity
+        public double contentSimilarity(String s1, String s2){
+
+            int distance = levenshteinDistance(s1, s2);
+
+            //Handle empty string case
+            int l1 = s1.length();
+            int l2 = s2.length();
+            int max = (l1 > l2) ? l1 : l2;
+
+            if (max == 0){
+
+                return 1.0;
+
+            }
+
+            //Return content similarity score
+            return 1.0 - ((double) distance / max);
+
+
+        }
 
         //Levenshtein Algorithm
         private static int levenshteinDistance(String s1, String s2){
