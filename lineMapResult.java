@@ -5,7 +5,7 @@ public class lineMapResult {
     private final Map <Integer, Integer> lineMap;
     
     //Constructor
-    public lineMapResult(Map<Integer, Integer> lineMap, List <String> oldLines, List <String> newLines){
+    public lineMapResult(Map<Integer, Integer> lineMap){
        
         this.lineMap = lineMap;
 
