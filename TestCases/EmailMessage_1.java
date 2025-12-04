@@ -1,4 +1,4 @@
-package TestCases;
+
 public class EmailMessage_1 {
 
     private String from;

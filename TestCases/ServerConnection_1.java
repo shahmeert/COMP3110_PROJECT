@@ -1,4 +1,4 @@
-package TestCases;
+
 public class ServerConnection_1 {
 
     private String host;

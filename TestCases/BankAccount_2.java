@@ -1,4 +1,4 @@
-package TestCases;
+
 public class BankAccount_2 {
 
     private String ownerName;

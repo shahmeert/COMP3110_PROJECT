@@ -1,4 +1,4 @@
-package TestCases;
+
 public class OrderCalculator_1 {
 
     private static final double TAX_RATE = 0.13;

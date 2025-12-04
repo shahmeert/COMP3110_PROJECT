@@ -1,4 +1,4 @@
-package TestCases;
+
 public class Product_2 {
 
     private String code;

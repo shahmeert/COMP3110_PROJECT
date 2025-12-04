@@ -1,4 +1,4 @@
-package TestCases;
+
 public class UserProfile_1 {
 
     private String username;

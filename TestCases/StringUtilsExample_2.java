@@ -1,4 +1,4 @@
-package TestCases;
+
 public class StringUtilsExample_2 {
 
     public String reverse(String text) { // parameter renamed from input -> text

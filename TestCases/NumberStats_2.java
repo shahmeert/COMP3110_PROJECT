@@ -1,4 +1,3 @@
-package TestCases;
 
 
 // File: NumberStats_2.java

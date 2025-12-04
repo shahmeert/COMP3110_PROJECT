@@ -1,4 +1,4 @@
-package TestCases;
+
 public class ChatMessage_2 {
 
     private String user;

@@ -1,4 +1,4 @@
-package TestCases;
+
 public class Shape_2 {
 
     private String category;

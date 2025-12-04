@@ -1,4 +1,4 @@
-package TestCases;
+
 public class StudentRecord_1 {
 
     private String name;

@@ -1,4 +1,4 @@
-package TestCases;
+
 public class OrderCalculator_2 {
 
     // small change: slightly different tax rate and discount threshold

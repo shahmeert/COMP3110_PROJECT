@@ -1,4 +1,4 @@
-package TestCases;
+
 public class Vehicle_2 {
 
     private String brand;

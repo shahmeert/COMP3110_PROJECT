@@ -1,4 +1,4 @@
-package TestCases;
+
 public class Vector2D_2 {
 
     private double xComp;

@@ -1,4 +1,4 @@
-package TestCases;
+
 public class CartItem_1 {
 
     private String productId;

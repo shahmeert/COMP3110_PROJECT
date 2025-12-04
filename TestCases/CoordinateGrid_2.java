@@ -1,4 +1,4 @@
-package TestCases;
+
 public class CoordinateGrid_2 {
 
     private int columns;

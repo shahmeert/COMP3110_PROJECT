@@ -1,4 +1,4 @@
-package TestCases;
+
 public class Vehicle_1 {
 
     private String make;

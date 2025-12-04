@@ -1,4 +1,4 @@
-package TestCases;
+
 public class SensorReading_2 {
 
     private String sensorId;

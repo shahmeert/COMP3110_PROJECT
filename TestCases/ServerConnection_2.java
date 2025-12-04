@@ -1,4 +1,4 @@
-package TestCases;
+
 public class ServerConnection_2 {
 
     private String address;
