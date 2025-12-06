@@ -264,6 +264,39 @@ public class mapMatch {
 
         static Map<Integer, Integer> resolveConflicts(List<CandidateMatch> candidateMatches, Map<Integer, Integer> exactMatchMapping){
 
+            Map<Integer, Integer> result = new HashMap<>(exactMatchMapping);
+
+            //Lists to store already matched lines
+            List<Integer> oldMatchedLines = new ArrayList<>(exactMatchMapping.keySet());
+            List<Integer> newMatchedLines = new ArrayList<>(exactMatchMapping.values());
+
+            for(CandidateMatch c : candidateMatches){
+
+                //Skip already matched lines
+                if(oldMatchedLines.contains(c.oldIndex)){
+
+                    continue;
+
+                }
+
+                if(newMatchedLines.contains(c.newIndex)){
+
+                    continue;
+
+                }
+
+                //Add unused pair to matches
+                result.put(c.oldIndex, c.newIndex);
+                
+                //Add match indexes to used line lists
+                oldMatchedLines.add(c.oldIndex);
+                newMatchedLines.add(c.newIndex);
+
+            }
+
+            //Return the final mapping
+            return result;
+
         }
 
     }
