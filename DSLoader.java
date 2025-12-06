@@ -39,7 +39,7 @@ public class DSLoader {
             List<String> newLines = normalizeFile.readNormalFile(newPath);
 
             //Name the test case
-            String testName = oldBase + (i + 1) + "→" + oldBase + (i + 2);
+            String testName = oldBase + "1_-→_" + oldBase + "2_result";
 
             //Add test case to list of test cases
             testList.add(new TestCase(testName, oldLines, newLines));
