@@ -4,6 +4,7 @@ Group Members: Shahmeer, Kyle, Marko
 Due Date: Dec 10th
 */
 
+import java.util.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -15,7 +16,12 @@ public class Project {
             return;
         }
 
-        String datasetPath = "TestCases";
+        //get filepath
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter Testcase path: ");
+
+        String datasetPath = scan.nextLine();
+        scan.close();
 
         try {
             List<TestCase> tests = DSLoader.Loader(datasetPath);
