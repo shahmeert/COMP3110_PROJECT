@@ -2,6 +2,9 @@ import java.util.*;
 
 public class mapMatch {
 
+    //Score to determine an acceptabe match
+    private static double validMatchScore = 0.6;
+
     public lineMapResult map(List<String> oldLines, List<String> newLines){
         
         //Find exact matches
@@ -248,7 +251,7 @@ public class mapMatch {
                 double totalScore = 0.7 * bestContentScore + 0.3 * contextScore;
 
                 // accept if similar
-                if (totalScore > 0.4){
+                if (totalScore >= validMatchScore){
                     candidates.add(new CandidateMatch(i, j, totalScore));
                 }
             }
@@ -271,6 +274,14 @@ public class mapMatch {
             List<Integer> newMatchedLines = new ArrayList<>(exactMatchMapping.values());
 
             for(CandidateMatch c : candidateMatches){
+
+                //Skip bad matches
+                if (c.score < validMatchScore) {
+                    
+                    continue;
+
+                }
+
 
                 //Skip already matched lines
                 if(oldMatchedLines.contains(c.oldIndex)){
