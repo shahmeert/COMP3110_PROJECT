@@ -11,11 +11,6 @@ import java.util.List;
 public class Project {
 
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Usage: java Project <dataset-folder>");
-            return;
-        }
-
         //get filepath
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter Testcase path: ");
