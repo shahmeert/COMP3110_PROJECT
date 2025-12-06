@@ -23,9 +23,10 @@ public class DSLoader {
             File newFile = files[i + 1];
 
             //Remove excess from title to determine base
-            String oldBase = oldFile.getName().replaceAll("\\d+\\.txt$", "");
-            String newBase = newFile.getName().replaceAll("\\d+\\.txt$", "");
+            String oldBase = oldFile.getName().replaceAll("\\d+\\.java$", "");
+            String newBase = newFile.getName().replaceAll("\\d+\\.java$", "");
 
+            
             if (!oldBase.equals(newBase)){
                 continue;
             }
