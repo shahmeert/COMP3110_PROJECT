@@ -17,6 +17,7 @@ public class DSLoader {
 
         //Create array of files
         File[] files = folder.listFiles();
+        Arrays.sort(files, Comparator.comparing(File::getName));
 
         for (int i = 0; i < files.length - 1; i++){
             File oldFile = files[i];
