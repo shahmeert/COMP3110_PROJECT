@@ -23,8 +23,8 @@ public class XMLAccuracyLoader {
                     Element e = (Element) node;
 
 
-                    int ogLine = Integer.parseInt(e.getAttribute("ORIG")) - 1;
-                    int newLine = Integer.parseInt(e.getAttribute("NEW")) - 1;  //finds mappings stored on xml and stores in a map
+                    int ogLine = Integer.parseInt(e.getAttribute("ORIG"));
+                    int newLine = Integer.parseInt(e.getAttribute("NEW"));  //finds mappings stored on xml and stores in a map
 
                     mapping.put(ogLine, newLine);
                 }
