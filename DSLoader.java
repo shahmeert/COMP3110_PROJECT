@@ -38,11 +38,28 @@ public class DSLoader {
             List<String> oldLines = normalizeFile.readNormalFile(oldPath);
             List<String> newLines = normalizeFile.readNormalFile(newPath);
 
-            //Name the test case
+            //Name and create the test case 
             String testName = oldBase + "1_-→_" + oldBase + "2_result";
 
+            //Get Xml File
+            String xmlBase = oldBase.replaceAll("_$", "").replaceAll("\\d+$", "");
+            File xmlFile = new File(folder, xmlBase + ".xml");
+            
+            Map<Integer, Integer> expectedMapping;
+
+            //Send xml file to loader
+            if(xmlFile.exists() && xmlFile.isFile()){
+
+                expectedMapping = XMLAccuracyLoader.loadXML(xmlFile);
+
+            }
+
+            //Create test case
+            TestCase tc = new TestCase(testName, oldLines, newLines, expectedMapping);
+
             //Add test case to list of test cases
-            testList.add(new TestCase(testName, oldLines, newLines));
+            testList.add(tc);
+            
         }
 
         return testList;
