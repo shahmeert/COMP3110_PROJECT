@@ -23,6 +23,12 @@ public class mapMatch {
         
         //Resolve Conflicts
         Map<Integer, Integer> finalMap = ConflictResolve.resolveConflicts(candidateMatches, exactMatchMapping);
+        
+        for (int i = 0; i < oldLines.size(); i++) {
+            if (!finalMap.containsKey(i)) {
+                finalMap.put(i, -1);   //any old line that didnt match mapped to negative 1
+            }
+        }
 
         //Return Final Result
         return new lineMapResult(finalMap);
