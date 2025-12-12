@@ -30,12 +30,9 @@ public class Project {
                 System.out.println("Processing test case: " + tc.name);
 
                 lineMapResult result = matcher.map(tc.oldLines, tc.newLines);
-                if (tc.hasXml) {
-                    double accuracy = AccuracyCalculator.compute(result, tc.expectedMapping);
+                if (tc.expectedMapping != null) {
+                    double accuracy = result.computeAccuracy(tc.expectedMapping); //computes accuracy based on expected results  
                     result.setAccuracy(accuracy);
-                } else {
-                    // no xml
-                    result.setAccuracy(-1);
                 }
 
                 // Create a separate result file for each pair
