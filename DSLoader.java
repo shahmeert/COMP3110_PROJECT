@@ -45,7 +45,7 @@ public class DSLoader {
             String xmlBase = oldBase.replaceAll("_$", "").replaceAll("\\d+$", "");
             File xmlFile = new File(folder, xmlBase + ".xml");
             
-            Map<Integer, Integer> expectedMapping;
+            Map<Integer, Integer> expectedMapping = new HashMap<>();
 
             //Send xml file to loader
             if(xmlFile.exists() && xmlFile.isFile()){
