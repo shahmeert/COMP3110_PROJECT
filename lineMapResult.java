@@ -39,6 +39,8 @@ public class lineMapResult {
         try {
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+                writer.write(String.format("Accuracy: %.2f%%", accuracy));
+                writer.newLine();
                 writer.write("Old File --> New File");
                 writer.newLine();
 
