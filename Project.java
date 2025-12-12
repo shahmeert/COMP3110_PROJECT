@@ -4,9 +4,8 @@ Group Members: Shahmeer, Kyle, Marko
 Due Date: Dec 10th
 */
 
-import java.util.*;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 public class Project {
 
@@ -31,6 +30,13 @@ public class Project {
                 System.out.println("Processing test case: " + tc.name);
 
                 lineMapResult result = matcher.map(tc.oldLines, tc.newLines);
+                if (tc.hasXml) {
+                    double accuracy = AccuracyCalculator.compute(result, tc.expectedMapping);
+                    result.setAccuracy(accuracy);
+                } else {
+                    // no xml
+                    result.setAccuracy(-1);
+                }
 
                 // Create a separate result file for each pair
                 String outFileName = tc.name + ".txt";
