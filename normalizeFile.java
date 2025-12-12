@@ -33,7 +33,7 @@ public class normalizeFile {
                 result.add(normalized);
             }
         }
-        return lines;
+        return result;
     }
 
     private static List<String> removeComments(List<String> lines){
