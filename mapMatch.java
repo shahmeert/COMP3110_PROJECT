@@ -49,21 +49,40 @@ public class mapMatch {
     }
 
     private List<LinePair> findExactMatch(List<String> oldLines, List<String> newLines){
-        List<LinePair> exactMatches = new ArrayList<>(); 
-        int lastNewIndex = -1; //tracks last matched
+        List<LinePair> exactMatches = new ArrayList<>();
+        int lastNewIndex = -1;
 
-        for(int i = 0; i < oldLines.size(); i++){ //loop throguh old lines
-            String oldText = oldLines.get(i); 
+        //Loop through old lines
+        for(int i = 0; i < oldLines.size(); i++){
 
-            for(int j = lastNewIndex + 1; j < newLines.size(); j++){ //loop through new lines
-                String newText = newLines.get(j); 
+            String oldText = oldLines.get(i);
+            String oldTrim = oldText.trim();
 
-                if(oldText.equals(newText)){ //if match we have to record
-                    exactMatches.add(new LinePair(i, j)); 
-                    lastNewIndex = j; //update the last index used so matches come after this
-                    break;//stop scanning and move on
-                }
+            //Skip empty or bracket old lines
+            if (oldTrim.isEmpty()  || oldTrim.matches("[{}]+")) {
+                continue;
             }
+
+            //Loop through new lines
+            for(int j = lastNewIndex + 1; j < newLines.size(); j++){
+                String newText = newLines.get(j);
+                String newTrim = newText.trim();
+
+                // NEW: skip empty or brace-only new lines
+                if (newTrim.isEmpty() || newTrim.matches("[{}]+")) {
+                    continue;
+                }
+
+                if(oldTrim.equals(newTrim)){
+
+                    exactMatches.add(new LinePair(i, j));
+                    lastNewIndex = j;
+                    break;
+                
+                }
+            
+            }
+        
         }
 
         return exactMatches;
@@ -211,7 +230,7 @@ public class mapMatch {
 
     for (int i = 0; i < nOld; i++) {
 
-        // skip if old line already has an exact match
+        //Skip if old line already has an exact match
         if (exactMatchesMap.containsKey(i)) {
             continue;
         }
@@ -259,9 +278,9 @@ public class mapMatch {
     return candidates;
 }
 
-    private static class ConflictResolve {
+   private static class ConflictResolve {
 
-        static Map<Integer, Integer> resolveConflicts(List<CandidateMatch> candidateMatches, Map<Integer, Integer> exactMatchMapping){
+    static Map<Integer, Integer> resolveConflicts(List<CandidateMatch> candidateMatches, Map<Integer, Integer> exactMatchMapping){
 
             Map<Integer, Integer> result = new HashMap<>(exactMatchMapping);
 
@@ -269,43 +288,85 @@ public class mapMatch {
             List<Integer> oldMatchedLines = new ArrayList<>(exactMatchMapping.keySet());
             List<Integer> newMatchedLines = new ArrayList<>(exactMatchMapping.values());
 
-            for(CandidateMatch c : candidateMatches){
+            for (CandidateMatch c : candidateMatches) {
 
                 //Skip bad matches
                 if (c.score < validMatchScore) {
+                    continue;
+                }
+
+                //Skip already matched
+                if (oldMatchedLines.contains(c.oldIndex) || newMatchedLines.contains(c.newIndex)) {
+                    continue;
+                }
+
+                boolean violatesOrder = false;
+
+                //Find closest matched old index before
+                Integer lowerOld = null;
+                Integer lowerNew = null;
+                for (Integer o : oldMatchedLines) {
+
+                    if (o < c.oldIndex && (lowerOld == null || o > lowerOld)) {
+
+                        lowerOld = o;
                     
-                    continue;
-
+                    
+                    }
                 }
 
+                if (lowerOld != null) {
 
-                //Skip already matched lines
-                if(oldMatchedLines.contains(c.oldIndex)){
+                    lowerNew = result.get(lowerOld);
 
-                    continue;
+                    if (lowerNew != null && c.newIndex < lowerNew) {
 
+                        violatesOrder = true;
+
+                    }
                 }
 
-                if(newMatchedLines.contains(c.newIndex)){
+                //Find closest matched old index after
+                Integer upperOld = null;
+                Integer upperNew = null;
 
+                for (Integer o : oldMatchedLines) {
+                
+                    if (o > c.oldIndex && (upperOld == null || o < upperOld)) {
+                
+                        upperOld = o;
+                
+                    }
+                
+                }
+                
+                if (upperOld != null) {
+                
+                    upperNew = result.get(upperOld);
+                
+                    if (upperNew != null && c.newIndex > upperNew) {
+                        //would go "past" a later mapping in the wrong direction
+                        violatesOrder = true;
+                    
+                    }
+                
+                }
+
+                if (violatesOrder) {
                     continue;
-
                 }
 
                 //Add unused pair to matches
                 result.put(c.oldIndex, c.newIndex);
-                
+
                 //Add match indexes to used line lists
                 oldMatchedLines.add(c.oldIndex);
                 newMatchedLines.add(c.newIndex);
-
             }
 
             //Return the final mapping
             return result;
-
         }
-
     }
 
 }
