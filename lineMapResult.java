@@ -20,18 +20,28 @@ public class lineMapResult {
     public double computeAccuracy(Map<Integer, Integer> expected){
         int correct = 0;
 
-        // compare tests and count correct test
-        for(int orgin : expected.keySet()){
-            int expectedVal = expected.get(orgin);
-            int actualVal = lineMap.getOrDefault(orgin, -2);
+        // union of all origin line indices seen in either map
+        Set<Integer> allLines = new HashSet<>();
+        allLines.addAll(expected.keySet());
+        allLines.addAll(lineMap.keySet());
 
-            if(expectedVal == actualVal){ 
+        if (allLines.isEmpty()) {
+            return 0.0;
+        }
+
+        for (int origin : allLines) {
+            int expectedVal = expected.getOrDefault(origin, -1); // -1 = “no mapping / deleted”
+            int actualVal   = lineMap.getOrDefault(origin, -1);
+
+            if (expectedVal == actualVal) {
                 correct++;
             }
         }
-        // return percent of correct tests
-        return (100.00 * correct) / expected.size();
+
+        return (100.0 * correct) / allLines.size();
+        
     }
+
 
 
     public void printToFile(String filename){
