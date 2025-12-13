@@ -201,73 +201,63 @@ public class mapMatch {
 
     }
 
-    // Finds possible matches for lines that were NOT exact matches
-    private List<CandidateMatch> findCandidates(List<String> oldLines, List<String> newLines, Map<Integer, Integer> exactMatchesMap){
+    private List<CandidateMatch> findCandidates(List<String> oldLines,List<String> newLines, Map<Integer, Integer> exactMatchesMap) {
 
-        Similarity similarity = new Similarity();
-        List<CandidateMatch> candidates = new ArrayList<>();  // Holds all possible match pairs
+    Similarity similarity = new Similarity();
+    List<CandidateMatch> candidates = new ArrayList<>();
 
-        int nOld = oldLines.size();
-        int nNew = newLines.size();
+    int nOld = oldLines.size();
+    int nNew = newLines.size();
 
-        // Loop through all old lines
-        for (int i = 0; i < nOld; i++){
+    for (int i = 0; i < nOld; i++) {
 
-            // Skip if this line already had an exact match
-            if (exactMatchesMap.containsKey(i)){
+        // skip if old line already has an exact match
+        if (exactMatchesMap.containsKey(i)) {
+            continue;
+        }
+
+        String oldLine = oldLines.get(i);
+
+        CandidateMatch bestCandidate = null;
+
+        for (int j = 0; j < nNew; j++) {
+
+            if (exactMatchesMap.containsValue(j)) {
                 continue;
             }
 
-            String oldLine = oldLines.get(i);  // The file line we’re trying to match
+            String newLine = newLines.get(j);
+            double bestContentScore = similarity.contentSimilarity(oldLine, newLine);
 
-
-            // try matching this line to every new line
-            for (int j = 0; j < nNew; j++) {
-
-                // Skip if the line is already part of an exact match
-                if (exactMatchesMap.containsValue(j)){
-                    continue;
+            if (j + 1 < nNew && !exactMatchesMap.containsValue(j + 1)) {
+                String combined = newLine + " " + newLines.get(j + 1);
+                double splitScore = similarity.contentSimilarity(oldLine, combined);
+                if (splitScore > bestContentScore) {
+                    bestContentScore = splitScore;
                 }
+            }
 
-                String newLine = newLines.get(j);  // A candidate new file line to compare
+            if (bestContentScore < 0.3) {
+                continue;
+            }
 
-                // Levenshtein stuff
-                double bestContentScore = similarity.contentSimilarity(oldLine, newLine);
+            double contextScore = similarity.contextSimilarity(i, j, exactMatchesMap);
 
-                // Check splits
-                // Try comparing oldLine with new[j] + new[j+1] combined
-                if (j + 1 < nNew && !exactMatchesMap.containsValue(j + 1)){
-                    String combined = newLine + " " + newLines.get(j + 1);
-                    double splitScore = similarity.contentSimilarity(oldLine, combined);
+            double totalScore = 0.7 * bestContentScore + 0.3 * contextScore;
 
-                    // If the combined lines match better, use that score
-                    if (splitScore > bestContentScore){
-                        bestContentScore = splitScore;
-                    }
-                }
-
-                // skip if not similar
-                if (bestContentScore < 0.3){
-                    continue;
-                }
-
-                double contextScore = similarity.contextSimilarity(i, j, exactMatchesMap);
-
-                // get final score for the line similarity
-                double totalScore = 0.7 * bestContentScore + 0.3 * contextScore;
-
-                // accept if similar
-                if (totalScore >= validMatchScore){
-                    candidates.add(new CandidateMatch(i, j, totalScore));
-                }
+            if (bestCandidate == null || totalScore > bestCandidate.score) {
+                bestCandidate = new CandidateMatch(i, j, totalScore);
             }
         }
 
-        // Sort from best score to worst score
-        candidates.sort((a, b) -> Double.compare(b.score, a.score));
-
-        return candidates;
+        if (bestCandidate != null && bestCandidate.score >= validMatchScore) {
+            candidates.add(bestCandidate);
+        }
     }
+
+    candidates.sort((a, b) -> Double.compare(b.score, a.score));
+    return candidates;
+}
 
     private static class ConflictResolve {
 
