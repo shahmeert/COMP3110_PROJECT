@@ -26,7 +26,7 @@ public class mapMatch {
         
         for (int i = 0; i < oldLines.size(); i++) {
             if (!finalMap.containsKey(i)) {
-                finalMap.put(i, -1);   //any old line that didnt match mapped to negative 1
+                finalMap.put(i, -2);   //any old line that didnt match mapped to negative 1
             }
         }
 

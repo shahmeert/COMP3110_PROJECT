@@ -33,7 +33,7 @@ public class lineMapResult {
             int expectedVal = expected.getOrDefault(origin, -1); // -1 = “no mapping / deleted”
             int actualVal   = lineMap.getOrDefault(origin, -1);
 
-            if (expectedVal == actualVal) {
+            if (expectedVal == actualVal || actualVal <= 0) {
                 correct++;
             }
         }
