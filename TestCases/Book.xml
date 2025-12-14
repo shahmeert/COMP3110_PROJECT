@@ -34,23 +34,20 @@
         <LOCATION ORIG="32" NEW="32" />
         <LOCATION ORIG="33" NEW="33" />
         </VERSION>
-    <VERSION NUMBER="2" CHECKED="TRUE">
-        <LOCATION ORIG="1" NEW="1" />
-        <LOCATION ORIG="3" NEW="3" />
-        <LOCATION ORIG="4" NEW="4" />
-        <LOCATION ORIG="8" NEW="8" />
-        <LOCATION ORIG="10" NEW="10" />
-        <LOCATION ORIG="14" NEW="14" />
-        <LOCATION ORIG="15" NEW="15" />
-        <LOCATION ORIG="18" NEW="18" />
-        <LOCATION ORIG="19" NEW="19" />
-        <LOCATION ORIG="23" NEW="24" />
-        <LOCATION ORIG="24" NEW="25" />
-        <LOCATION ORIG="25" NEW="26" />
-        <LOCATION ORIG="26" NEW="27" />
-        <LOCATION ORIG="28" NEW="29" />
-        <LOCATION ORIG="29" NEW="30" />
-        <LOCATION ORIG="32" NEW="33" />
-        <LOCATION ORIG="33" NEW="34" />
+        <VERSION NUMBER="2" CHECKED="TRUE">
+            <LOCATION ORIG="1" NEW="1" />
+            <LOCATION ORIG="3" NEW="3" />
+            <LOCATION ORIG="4" NEW="4" />
+            <LOCATION ORIG="8" NEW="8" />
+            <LOCATION ORIG="10" NEW="10" />
+            <LOCATION ORIG="14" NEW="14" />
+            <LOCATION ORIG="15" NEW="15" />
+            <LOCATION ORIG="18" NEW="19" />
+            <LOCATION ORIG="19" NEW="20" />
+            <LOCATION ORIG="23" NEW="24" />
+            <LOCATION ORIG="24" NEW="25" />
+            <LOCATION ORIG="25" NEW="26" />
+            <LOCATION ORIG="26" NEW="27" />
         </VERSION>
+
     </TEST>
