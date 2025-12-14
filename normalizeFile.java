@@ -6,41 +6,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-
-- Recieves a file
-- Normalizes the file
-- returns the file as List 
-
+ - Receives a file
+ - Removes comments
+ - Normalizes whitespace
+ - Returns the file as a List<String> with the SAME number of lines
 */
 
 public class normalizeFile {
-    
-    public static List<String> readNormalFile(Path file) throws IOException{
+
+    public static List<String> readNormalFile(Path file) throws IOException {
         List<String> lines = new ArrayList<>();
 
-        try(BufferedReader br = Files.newBufferedReader(file)){
+        try (BufferedReader br = Files.newBufferedReader(file)) {
             String line;
-
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 lines.add(line);
             }
         }
-        List<String> noComments = removeComments(lines); 
+
+        // Remove comment *content* but keep one output line per input line
+        List<String> noComments = removeComments(lines);
+
+        // Normalize spaces but DO NOT drop empty lines
         List<String> result = new ArrayList<>();
         for (String line : noComments) {
             String normalized = normalize(line);
-            if (!normalized.isEmpty()) {
-                result.add(normalized);
-            }
+            result.add(normalized); // keep even if blank
         }
+
         return result;
     }
 
-    private static List<String> removeComments(List<String> lines){
+    private static List<String> removeComments(List<String> lines) {
         List<String> result = new ArrayList<>();
-        boolean inBlock = false;
+        boolean inBlock = false;   // inside /* ... */ across lines
 
-        for(String line : lines){
+        for (String line : lines) {
             StringBuilder sb = new StringBuilder();
             boolean inString = false;
             char stringChar = 0;
@@ -48,56 +49,61 @@ public class normalizeFile {
             int i = 0;
             int n = line.length();
 
-            while(i < n){
+            while (i < n) {
                 char c = line.charAt(i);
 
-                if(!inBlock){ //handles string literals
-
-                    if(c == '"' || c == '\''){
-                        if(!inString){
+                if (inBlock) {
+                    // Look only for end of block comment */
+                    if (i + 1 < n && c == '*' && line.charAt(i + 1) == '/') {
+                        inBlock = false;
+                        i += 2; // skip */
+                    } else {
+                        i++;    // skip comment chars
+                    }
+                } else { // not in block comment
+                    if (!inString) {
+                        // Start of line/block comment?
+                        if (i + 1 < n && c == '/' && line.charAt(i + 1) == '*') {
+                            inBlock = true;
+                            i += 2;  // skip /*
+                            continue;
+                        }
+                        // Single-line comment //
+                        if (i + 1 < n && c == '/' && line.charAt(i + 1) == '/') {
+                            // rest of line is a comment
+                            break;
+                        }
+                        // Start of string literal?
+                        if (c == '"' || c == '\'') {
                             inString = true;
                             stringChar = c;
-                        } else if(c == stringChar){
-                            if(i > 0 && line.charAt(i - 1) != '\\'){
-                                inString = false;
-                            }
+                            sb.append(c);
+                            i++;
+                        } else {
+                            sb.append(c);
+                            i++;
                         }
-                    }
-                    sb.append(c);
-                    i++;
-                }
-                else if(!inString){ //looks for comments outside of string
-                    if(i + 1 < n && c == '/' && line.charAt(i + 1) == '*' ){ //block comments
-                        inBlock = true;
-                        i += 2;
-                    }
-                    else if( i + 1 < n && c =='/' && line.charAt(i + 1) == '/'){ //single line comment
-                        break;
-                    }
-                    else{ //inside string normal char
+                    } else {
+                        // Inside a string literal: copy everything until end of string
                         sb.append(c);
+                        if (c == stringChar && (i == 0 || line.charAt(i - 1) != '\\')) {
+                            inString = false;
+                        }
                         i++;
                     }
+                }
+            }
 
-                }
-                else{
-                    if(i + 1 < n && c == '*' && line.charAt(i +1) == '/'){
-                        inBlock = false;
-                        i += 2;
-                    } else{
-                        i++;
-                    }
-                }
-        }
+            // Always add a line (may be empty) to preserve indexing
             result.add(sb.toString());
         }
+
         return result;
     }
 
-    private static String normalize(String line){
+    private static String normalize(String line) {
         line = line.trim();
-        line = line.replaceAll("\\s+", " ");
+        line = line.replaceAll("\s+$", "");
         return line;
     }
-
 }
