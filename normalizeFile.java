@@ -91,6 +91,10 @@ public class normalizeFile {
                         }
                         i++;
                     }
+
+                    //Normal character
+                    sb.append(c);
+                    i++;
                 }
             }
 

@@ -70,7 +70,9 @@ public class mapMatch {
                     lastNewIndex = j; // update last index used so matches come after this
                     break;           
                 }
+            
             }
+        
         }
 
         return exactMatches;
@@ -184,34 +186,22 @@ public class mapMatch {
 
     }
 
-    // Finds possible matches for lines that were NOT exact matches
-    private List<CandidateMatch> findCandidates(List<String> oldLines, List<String> newLines, Map<Integer, Integer> exactMatchesMap){
+    private List<CandidateMatch> findCandidates(List<String> oldLines,List<String> newLines, Map<Integer, Integer> exactMatchesMap) {
 
-        Similarity similarity = new Similarity();
-        List<CandidateMatch> candidates = new ArrayList<>();  // Holds all possible match pairs
+    Similarity similarity = new Similarity();
+    List<CandidateMatch> candidates = new ArrayList<>();
 
-        int nOld = oldLines.size();
-        int nNew = newLines.size();
+    int nOld = oldLines.size();
+    int nNew = newLines.size();
 
-        // Loop through all old lines
-        for (int i = 0; i < nOld; i++){
-
-            // Skip if this line already had an exact match
-            if (exactMatchesMap.containsKey(i)){
-                continue;
-            }
-
-            String oldLine = oldLines.get(i);  // The file line we’re trying to match
+    for (int i = 0; i < nOld; i++) {
 
             // try matching this line to every new line
             for (int j = 0; j < nNew; j++) {
 
-                // Skip if the line is already part of an exact match
-                if (exactMatchesMap.containsValue(j)){
-                    continue;
-                }
+        CandidateMatch bestCandidate = null;
 
-                String newLine = newLines.get(j);  // A candidate new file line to compare
+        for (int j = 0; j < nNew; j++) {
 
                 double bestContentScore = similarity.contentSimilarity(oldLine, newLine);
 
@@ -224,13 +214,14 @@ public class mapMatch {
                         bestContentScore = splitScore;
                     }
                 }
+            }
 
                 // skip if not similar enough
                 if (bestContentScore < 0.3){
                     continue;
                 }
 
-                double contextScore = similarity.contextSimilarity(i, j, exactMatchesMap);
+            double contextScore = similarity.contextSimilarity(i, j, exactMatchesMap);
 
                 double totalScore = 0.7 * bestContentScore + 0.3 * contextScore;
 
@@ -240,13 +231,14 @@ public class mapMatch {
             }
         }
 
-        // Sort from best score to worst score
-        candidates.sort((a, b) -> Double.compare(b.score, a.score));
-
-        return candidates;
+        if (bestCandidate != null && bestCandidate.score >= validMatchScore) {
+            candidates.add(bestCandidate);
+        }
     }
 
-    private static class ConflictResolve {
+    candidates.sort((a, b) -> Double.compare(b.score, a.score));
+    return candidates;
+}
 
         static Map<Integer, Integer> resolveConflicts(List<CandidateMatch> candidateMatches,
                                                       Map<Integer, Integer> exactMatchMapping){
@@ -257,7 +249,7 @@ public class mapMatch {
             List<Integer> oldMatchedLines = new ArrayList<>(exactMatchMapping.keySet());
             List<Integer> newMatchedLines = new ArrayList<>(exactMatchMapping.values());
 
-            for(CandidateMatch c : candidateMatches){
+            for (CandidateMatch c : candidateMatches) {
 
                 if (c.score < validMatchScore) {
                     continue;
